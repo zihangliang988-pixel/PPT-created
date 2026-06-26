@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPT 智造</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ Header ═══ -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" width="28" height="28">
+          <path d="M6 4h20a2 2 0 012 2v20a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z" fill="#6366f1" opacity=".12"/>
+          <path d="M10 8h12a1 1 0 011 1v1a1 1 0 01-1 1H10a1 1 0 01-1-1V9a1 1 0 011-1z" fill="#6366f1" opacity=".5"/>
+          <path d="M10 14h8a1 1 0 011 1v1a1 1 0 01-1 1h-8a1 1 0 01-1-1v-1a1 1 0 011-1z" fill="#6366f1" opacity=".7"/>
+          <path d="M10 20h6a1 1 0 011 1v1a1 1 0 01-1 1h-6a1 1 0 01-1-1v-1a1 1 0 011-1z" fill="#6366f1"/>
+        </svg>
+        <span class="logo-text">PPT 智造</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="status-badge" id="statusBadge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">就绪</span>
+      </span>
+    </div>
+  </header>
+
+  <!-- ═══ Main ═══ -->
+  <div class="main">
+
+    <!-- ── Preview Panel ── -->
+    <aside class="preview-panel" id="previewPanel">
+      <div class="preview-header">
+        <h3 class="preview-title">预览</h3>
+        <div class="preview-toolbar" id="previewToolbar" style="display:none">
+          <button class="btn btn-sm btn-outline" onclick="restylePPT()" title="一键换风格">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            换风格
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="downloadPPT()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            下载
+          </button>
+        </div>
+      </div>
+      <div class="preview-content" id="previewContent">
+        <div class="preview-empty" id="previewEmpty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          <p>生成 PPT 后<br>在这里预览幻灯片</p>
+        </div>
+        <div class="preview-list" id="previewList"></div>
+      </div>
+    </aside>
+
+    <!-- ── Chat Panel ── -->
+    <section class="chat-panel" id="chatPanel">
+      <div class="chat-messages" id="chatMessages">
+        <!-- Welcome message -->
+        <div class="msg msg-ai">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">P</div>
+          <div class="msg-body">
+            <div class="msg-text">
+              你好！我是 PPT 智造助手。你可以上传 PDF/DOCX 文档，或者直接输入文字描述，我来为你生成精美的 PPT。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Input Area ── -->
+      <div class="chat-input">
+        <!-- File zone -->
+        <div class="file-zone" id="fileZone">
+          <div class="file-zone-content">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>上传 PDF / DOCX / TXT / MD 文件</span>
+          </div>
+          <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.md" multiple hidden>
+          <div class="file-list" id="fileList"></div>
+        </div>
+
+        <!-- Text input -->
+        <div class="text-input-wrap">
+          <textarea class="text-input" id="textInput" rows="2" placeholder="输入文字或描述你想生成的 PPT 主题……" maxlength="10000"></textarea>
+          <div class="input-actions">
+            <button class="btn btn-ghost" onclick="document.getElementById('fileInput').click()" title="上传文件">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </button>
+            <button class="btn btn-primary" id="generateBtn" onclick="handleGenerate()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              生成 PPT
+            </button>
+          </div>
+        </div>
+
+        <!-- Modify area (hidden initially) -->
+        <div class="modify-area" id="modifyArea" style="display:none">
+          <div class="modify-input-wrap">
+            <textarea class="text-input" id="modifyInput" rows="2" placeholder="输入修改要求……"></textarea>
+            <button class="btn btn-primary" onclick="handleModify()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              修改
+            </button>
+          </div>
+          <div class="modify-actions">
+            <button class="btn btn-ghost btn-sm" onclick="downloadPPT()">下载 PPT</button>
+            <button class="btn btn-ghost btn-sm" onclick="restylePPT()">换风格</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ Modals ═══ -->
+
+  <!-- Param Modal -->
+  <div class="modal-overlay" id="paramModal" style="display:none">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h3>生成参数</h3>
+        <button class="modal-close" onclick="closeParamModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">PPT 标题</label>
+          <input class="form-input" id="paramTitle" placeholder="自动从内容生成" maxlength="50">
+        </div>
+        <div class="form-group">
+          <label class="form-label">页数</label>
+          <div class="form-inline">
+            <input class="form-input" id="paramPages" type="number" min="3" max="50" value="10" style="width:100px">
+            <span class="form-hint" id="paramPagesHint">页，基于内容分析推荐</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">详细程度</label>
+          <div class="btn-group">
+            <button class="btn btn-option" data-value="simple" onclick="selectDetail(this)">精简</button>
+            <button class="btn btn-option active" data-value="moderate" onclick="selectDetail(this)">适中</button>
+            <button class="btn btn-option" data-value="detailed" onclick="selectDetail(this)">详细</button>
+          </div>
+        </div>
+        <div class="form-divider"></div>
+        <div class="form-group">
+          <label class="form-label">风格选择</label>
+          <div class="style-grid" id="styleGrid">
+            <!-- filled by JS -->
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-text" onclick="toggleCustomStyle()">+ 自定义风格描述</button>
+          <div id="customStyleWrap" style="display:none;margin-top:8px">
+            <textarea class="form-input" id="customStyleDesc" rows="2" placeholder="用文字描述想要的风格，例如：深色背景、金色文字、科技感..." maxlength="500"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeParamModal()">取消</button>
+        <button class="btn btn-primary" onclick="confirmGenerate()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          确认生成
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outline Modal -->
+  <div class="modal-overlay" id="outlineModal" style="display:none">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3>预览大纲 <span class="form-hint" id="outlineCount"></span></h3>
+        <button class="modal-close" onclick="closeOutlineModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="outline-list" id="outlineList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeOutlineModal()">返回修改</button>
+        <button class="btn btn-primary" onclick="confirmOutline()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          确认并生成 PPT
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restyle Modal -->
+  <div class="modal-overlay" id="restyleModal" style="display:none">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h3>换风格</h3>
+        <button class="modal-close" onclick="closeRestyleModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="style-grid" id="restyleGrid"></div>
+        <div class="form-group" style="margin-top:12px">
+          <button class="btn btn-text" onclick="toggleCustomRestyle()">+ 自定义风格描述</button>
+          <div id="customRestyleWrap" style="display:none;margin-top:8px">
+            <textarea class="form-input" id="restyleDesc" rows="2" placeholder="描述想要的风格..." maxlength="500"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeRestyleModal()">取消</button>
+        <button class="btn btn-primary" onclick="confirmRestyle()">应用</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

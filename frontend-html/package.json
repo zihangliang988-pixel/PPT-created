@@ -1,0 +1,11 @@
+{
+  "name": "ppt-maker-html",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "dev-vite": "npx vite"
+  },
+  "devDependencies": {
+    "vite": "^6"
+  }
+}
